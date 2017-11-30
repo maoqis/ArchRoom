@@ -33,6 +33,8 @@ import com.maoqis.test.room.db.dao.MyDao;
 import com.maoqis.test.room.db.entity.Book;
 import com.maoqis.test.room.db.entity.User;
 
+import java.util.List;
+
 @Database(entities = {User.class, Book.class}, version = 1)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
@@ -70,15 +72,21 @@ public abstract class AppDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-//                        executors.diskIO().execute(() -> {
-//                            // Add a delay to simulate a long-running operation
-//                            addDelay();
-//                            // Generate the data for pre-population
-//                            AppDatabase database = AppDatabase.getInstance(appContext, executors);
-//
-//                            // notify that the database was created and it's ready to be used
-//                            database.setDatabaseCreated();
-//                        });
+                        if (executors != null){
+                            executors.diskIO().execute(() -> {
+                                // Add a delay to simulate a long-running operation
+                                addDelay();
+                                // Generate the data for pre-population
+                                AppDatabase database = AppDatabase.getInstance(appContext, executors);
+                                List<User> users = DataGenerator.generatorUser();
+                                database.myDao().insertUserList(users);
+                                List<Book> books = DataGenerator.generatorBooks();
+                                database.myDao().insertBookList(books);
+                                // notify that the database was created and it's ready to be used
+                                database.setDatabaseCreated();
+                            });
+                        }
+
                     }
                 }).build();
     }

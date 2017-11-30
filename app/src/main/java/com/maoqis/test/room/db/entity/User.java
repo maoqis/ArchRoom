@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
 /**
  * Created by bjmaoqisheng on 2017/11/29.
  */
-@Entity(tableName = "user", indices = {@Index(value = {"first_name", "last_name"}, unique = true)})
+@Entity(tableName = "user", indices = {@Index(value = "id", unique = true)})
 public class User {
     @PrimaryKey
     public long id;
@@ -27,6 +27,75 @@ public class User {
     @Embedded
     public Address address;
 
+    public User() {
+    }
 
+    public User(long id, String firstName, String lastName, int age, Bitmap picture, Address address) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.picture = picture;
+        this.address = address;
+    }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Bitmap getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Bitmap picture) {
+        this.picture = picture;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", picture=" + picture +
+                ", address=" + address +
+                '}';
+    }
 }
