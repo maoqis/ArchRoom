@@ -2,6 +2,8 @@ package com.maoqis.test.room;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.Nullable;
 
 import com.maoqis.test.room.db.AppDatabase;
 import com.maoqis.test.room.db.entity.Book;
@@ -24,9 +26,14 @@ public class DataRepository {
         mObservableProducts = new MediatorLiveData<>();
 
         mObservableProducts.addSource(mDatabase.myDao().loadAllBooks(),
-                productEntities -> {
-                    if (mDatabase.getDatabaseCreated().getValue() != null) {
-                        mObservableProducts.postValue(productEntities);
+                new Observer<List<Book>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Book> bookList) {
+                        {
+                            if (mDatabase.getDatabaseCreated().getValue() != null) {
+                                mObservableProducts.postValue(bookList);
+                            }
+                        }
                     }
                 });
     }
